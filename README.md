@@ -1,5 +1,13 @@
 A basic neural network to classify stocks from 1-5 stars (1 suggesting to sell and 5 to buy), based on common financial metrics such as dividend yield and P/E ratio.
 
+/***************************************************************
+ *  Compilation:  javac *.java
+ *  Execution:    java Main <training-dataset> <test-dataset> <output-filename>
+ *
+ *  % java Main sp500-financials-2016.training sp500-financials-2012.test output
+ *
+ ***************************************************************/
+
 The neural network is trained with a dataset representing the current financial information of the S&P 500 constituents, each stock classified based on the current Morningstar rating.
 
 The neural network classification model is then applied to the test dataset, the S&P 500 constituents from 2012, to rate each stock.

@@ -5,52 +5,61 @@ public class Main
 {
     public static void main(String[] args)
     {
-        // Handle command line input
+        /*
+         * Handle command line input
+         */
         if (args.length != 3) {
-            System.out.println("Must specify 3 command line arguments:\n$ java Main <dataset filename> <k> <output filename>");
+            System.out.println("Err1: Invalid execution parameters\n   % java Main <training-dataset> <test-dataset> <output-filename>");
             System.exit(0);
         }
 
-        Database db = null;
-
+        Database dbTrain, dbTest = null;
         try {
-            db = new Database(args[0]);
+            dbTest  = new Database(args[1]);    //2012
+            // dbTrain = new Database(args[0]);    //2016
         } catch (Exception e) {
-            System.out.println("Could not create new Database object");
-        }
-
-        int k = Integer.parseInt(args[1]);
-
-
-        // Make sure DB has enough records given k
-        if (db.data.size() < k) {
-            System.out.println("'k' is larger than the number of records in the database!");
+            System.out.println("Err2: Could not create new Database object");
             System.exit(0);
         }
 
 
-        // Run k-means
-        KMeans km = new KMeans(db, k);
-        List<Cluster> clusters = km.runKMeans();
-
-
-        // Print results to output file
-        File fOut = new File(args[2]);
-        try
-        {
-            PrintWriter pw = new PrintWriter(fOut);
-
-            //TODO: fix
-            for (Cluster c : clusters) {
-                pw.println("Size: " + c.size());
-                pw.println("Centroid: " + c.centroid);
-                pw.println("Records: " + c.records + "\n");
+        for (int row = 0; row < dbTest.data.size(); row++) {
+            for (int col = 0; col < dbTest.data.get(row).size(); col++) {
+                System.out.print(dbTest.data.get(row).get(col) + "  ");
             }
 
-            pw.close();
+            System.out.println();
         }
-        catch (FileNotFoundException ex) {
-            System.out.println(ex);
-        }
+
+        System.out.println("\nCols: " + dbTest.data.get(0).size());
+        System.out.println("Rows: " + dbTest.data.size());
+
+
+
+        /*
+         * Run neural net
+         */
+        //TODO
+
+
+
+        /* 
+         * Print results to output file
+         */
+        //TODO
+        // File fOut = new File(args[2]);
+        // try
+        // {
+        //     PrintWriter pw = new PrintWriter(fOut);
+
+        //     pw.println();
+
+        //     pw.close();
+        // }
+        // catch (FileNotFoundException ex) {
+        //     System.out.println(ex);
+        // }
+
     }
+
 }

@@ -60,15 +60,49 @@ public class Database
                         record.add(0.0);
                     }
                 }
-                else if (col == 4) {    // P/E: Replace "N/A" with =Price/EBITDA
+
+                else if (col == 4) {    // P/E: Replace "N/A" with = Price / (EBITDA / (MC/Price))
                     try {
                         record.add(Double.parseDouble(val));
                     } catch (NumberFormatException e) {
-                        //TODO
-                        record.add(-100.0);
+                        double ebitda, marketCap;
+
+                        String editdaStr = dataStr.get(row).get(9);
+                        String marketCapStr = dataStr.get(row).get(8);
+
+                        try {
+                            ebitda = Double.parseDouble(editdaStr);
+                        } catch (NumberFormatException e1) {    //ebitda value is formatted wrong
+                            if (editdaStr.charAt(editdaStr.length()-1) == 'B') {
+                                ebitda = Double.parseDouble(editdaStr.substring(0, editdaStr.length()-1));
+                            }
+                            else if (editdaStr.charAt(editdaStr.length()-1) == 'M') {
+                                ebitda = Double.parseDouble(editdaStr.substring(0, editdaStr.length()-1)) / 1000;
+                            }
+                            else {    //error!
+                                ebitda = -1.0;
+                            }
+                        }
+
+                        try {
+                            marketCap = Double.parseDouble(marketCapStr);
+                        } catch (NumberFormatException e2) {    //ebitda value is formatted wrong
+                            if (marketCapStr.charAt(marketCapStr.length()-1) == 'B') {
+                                marketCap = Double.parseDouble(marketCapStr.substring(0, marketCapStr.length()-1));
+                            }
+                            else if (marketCapStr.charAt(marketCapStr.length()-1) == 'M') {
+                                marketCap = Double.parseDouble(marketCapStr.substring(0, marketCapStr.length()-1)) / 1000;
+                            }
+                            else {    //error!
+                                marketCap = -1.0;
+                            }
+                        }
+
+                        record.add(record.get(0) / (ebitda / (marketCap / record.get(0))));
                     }
                 }
-                else if (col == 8 || col == 9) {    //Market Cap, EBITDA: Remove last char and normalize
+                
+                else if (col == 8 || col == 9) {    // Market Cap, EBITDA: Remove last char and normalize
                     int len = val.length();
                     
                     if (val.charAt(len-1) == 'B') {
@@ -80,23 +114,24 @@ public class Database
                     else {
                         try {
                             record.add(Double.parseDouble(val));
-                        } catch (NumberFormatException e) {
+                        } catch (NumberFormatException e) {    //error!
                             record.add(-1.0);
                         }
                     }
                 }
+                
                 else if (col == 11) {    // Price/Book: Replace "N/A" with =Price/Book Value
                     try {
                         record.add(Double.parseDouble(val));
                     } catch (NumberFormatException e) {
-                        //TODO
-                        record.add(-100.0);
+                        record.add(record.get(0) / record.get(3));
                     }
                 }
+                
                 else {
                     try {
                         record.add(Double.parseDouble(val));
-                    } catch (NumberFormatException e) {
+                    } catch (NumberFormatException e) {    //error!
                         record.add(-1.0);
                     }
                 }

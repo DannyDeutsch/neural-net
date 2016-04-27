@@ -4,7 +4,7 @@ A basic neural network to classify stocks from 1-5 stars (1 suggesting to sell a
  *  Compilation:  javac *.java
  *  Execution:    java Main <training-dataset> <test-dataset> <output-filename>
  *
- *  % java Main data/sp500-financials-2016.training data/sp500-financials-2012.test output
+ *  % java Main data/sp500-financials-2016.csv data/sp500-financials-2012.csv output
  *
  ***************************************************************/
 

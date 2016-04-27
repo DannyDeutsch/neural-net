@@ -50,20 +50,38 @@ public class Database
 
             for (int col = 2; col < dataStr.get(row).size(); col++)    //skip Symbol, Name attributes
             {
-                // Dividend values: Replace "" or "N/A" with 0
-                // if (col == 3)
-                // {
-                //     try {
-                //         record.add(Double.parseDouble(dataStr.get(row).get(col)));
-                //     } catch (NumberFormatException e) {
-                //         record.add(0.0);
-                //     }
-                // }
-                // else {
-                try {
-                    record.add(Double.parseDouble(dataStr.get(row).get(col)));
-                } catch (NumberFormatException e) {
-                    record.add(0.0);
+                if (col == 3)    // Dividend: Replace "N/A" or "" with "0.0"
+                {
+                    try {
+                        record.add(Double.parseDouble(dataStr.get(row).get(col)));
+                    } catch (NumberFormatException e) {
+                        record.add(0.0);
+                    }
+                } else if (col == 4) {    // P/E: Replace "N/A" with =Price/EBITDA
+
+                } else if (col == 8 || col == 9) {    //Market Cap, EBITDA:  
+                    /*
+                    if (last char == 'B')
+                        remove last char
+                        add(parseDouble)
+                    else if (last char == 'M')
+                        remove last char
+                        add(parseDouble/1000)
+                    else
+                        try
+                            add(parseDouble)
+                        catch
+                            add -1.0
+                    */
+                } else if (col == 11) {    // Price/Book: Replace "N/A" with =Price/Book Value
+
+                }
+                else {
+                    try {
+                        record.add(Double.parseDouble(dataStr.get(row).get(col)));
+                    } catch (NumberFormatException e) {
+                        record.add(-1.0);
+                    }
                 }
             }
 
@@ -79,15 +97,6 @@ public class Database
         istream.close();
         stdin.close();
 	}
-
-    boolean isDouble(String str) {
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
 
 }
 

@@ -50,35 +50,51 @@ public class Database
 
             for (int col = 2; col < dataStr.get(row).size(); col++)    //skip Symbol, Name attributes
             {
+                String val = dataStr.get(row).get(col);
+
                 if (col == 3)    // Dividend: Replace "N/A" or "" with "0.0"
                 {
                     try {
-                        record.add(Double.parseDouble(dataStr.get(row).get(col)));
+                        record.add(Double.parseDouble(val));
                     } catch (NumberFormatException e) {
                         record.add(0.0);
                     }
-                } else if (col == 4) {    // P/E: Replace "N/A" with =Price/EBITDA
-
-                } else if (col == 8 || col == 9) {    //Market Cap, EBITDA:  
-                    /*
-                    if (last char == 'B')
-                        remove last char
-                        add(parseDouble)
-                    else if (last char == 'M')
-                        remove last char
-                        add(parseDouble/1000)
-                    else
-                        try
-                            add(parseDouble)
-                        catch
-                            add -1.0
-                    */
-                } else if (col == 11) {    // Price/Book: Replace "N/A" with =Price/Book Value
-
+                }
+                else if (col == 4) {    // P/E: Replace "N/A" with =Price/EBITDA
+                    try {
+                        record.add(Double.parseDouble(val));
+                    } catch (NumberFormatException e) {
+                        //TODO
+                        record.add(-100.0);
+                    }
+                }
+                else if (col == 8 || col == 9) {    //Market Cap, EBITDA:  
+                    int len = val.length();
+                    if (val.charAt(len-1) == 'B') {
+                        record.add(Double.parseDouble(val.substring(0, len-1)));
+                    }
+                    else if (val.charAt(len-1) == 'M') {
+                        record.add(Double.parseDouble(val.substring(0, len-1)) / 1000);
+                    }
+                    else {
+                        try {
+                            record.add(Double.parseDouble(val));
+                        } catch (NumberFormatException e) {
+                            record.add(-1.0);
+                        }
+                    }
+                }
+                else if (col == 11) {    // Price/Book: Replace "N/A" with =Price/Book Value
+                    try {
+                        record.add(Double.parseDouble(val));
+                    } catch (NumberFormatException e) {
+                        //TODO
+                        record.add(-100.0);
+                    }
                 }
                 else {
                     try {
-                        record.add(Double.parseDouble(dataStr.get(row).get(col)));
+                        record.add(Double.parseDouble(val));
                     } catch (NumberFormatException e) {
                         record.add(-1.0);
                     }

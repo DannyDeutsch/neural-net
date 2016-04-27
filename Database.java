@@ -68,8 +68,9 @@ public class Database
                         record.add(-100.0);
                     }
                 }
-                else if (col == 8 || col == 9) {    //Market Cap, EBITDA:  
+                else if (col == 8 || col == 9) {    //Market Cap, EBITDA: Remove last char and normalize
                     int len = val.length();
+                    
                     if (val.charAt(len-1) == 'B') {
                         record.add(Double.parseDouble(val.substring(0, len-1)));
                     }

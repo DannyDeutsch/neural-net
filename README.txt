@@ -1,17 +1,13 @@
-A basic neural network to classify stocks from 1-5 stars (1 suggesting to sell and 5 to buy), based on common financial metrics such as dividend yield and P/E ratio.
+A basic program that preprocesses a financial dataset, filling in missing values smartly, then running the NaiveBayes classification and k-means clustering algorithms.
+
+Upon execution, the preprocessed dataset will be written to a new cvs file in the data/ directory, and the results of NaiveBayes and k-means will be printed to stdout.
 
 /***************************************************************
  *  Compilation:  javac *.java
- *  Execution:    java Main <training-dataset> <test-dataset>
+ *  Execution:    java Main <dataset> <k>
  *
- *  % java Main data/sp500-financials-2016-rated.csv data/sp500-financials-2012.csv
+ *  % java Main data/sp500-financials-2016-rated.csv 4
  *
  ***************************************************************/
 
-The neural network is trained with a dataset representing the current financial information of the S&P 500 constituents, each stock classified based on the current Morningstar rating.
-
-The neural network classification model is then applied to the test dataset, the S&P 500 constituents from 2012, to rate each stock.
-
-The "accuracy" of this classification model will be judged based on the to-date performance of 4 and 5 star stocks from 2012. A positive return is necessary to deem this model valid at all; a significant outperformance of the broad S&P 500 index is necessary to deem it potentially valuable.
-
-Accuracy, as defined above, will also be compared to those of C4.5 and NaiveBayes, which are more sensible classification algorithms given these data.
+See my report for a more thorough pattern and insight analysis of the data.

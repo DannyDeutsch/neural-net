@@ -10,12 +10,18 @@ public class NaiveBayes
 		this.db = db;
 	}
 
+	/* Returns true if 'val' is within 10% range of 'anchor' */
+	private boolean isInRange(double val, double anchor)
+	{
+		if (val <= anchor + (.05*anchor) && val >= anchor - (.05*anchor))
+			return true;
+		return false;
+	}
+
 
 	public List<Double> runBayes()
 	{
 		List<Double> classified = new ArrayList<Double>(); //list of class assignments, one per record
-		double c;	//classification: 1.0, 2.0, ... , 5.0
-
 
 		// Compute P(C), for C = 1,2,3,4,5
 		int total = db.data.size();			//total number of tuples
@@ -43,12 +49,6 @@ public class NaiveBayes
 		for (int i = 0; i < cProbs.length; i++) {
 			cProbs[i] = (double) cCounts[i] / total;
 		}
-
-		// Print statements (testing purposes)
-		/*for (int cnt : cCounts) System.out.print(cnt + "  ");
-		System.out.println("\nTotal:  " + total + "\n");
-
-		for (double prob : cProbs) System.out.print(prob + "  ");*/
 
 
 		double attrVal;
@@ -78,7 +78,7 @@ public class NaiveBayes
 					// } else if (mushroom.get(0).equals("p") && mushroom.get(i).equals(attrVal)) {
 					// 	attrPCount++;
 					// }
-					if (record.get(i).equals(attrVal))
+					if (isInRange(record.get(i), attrVal))
 					{
 						switch ((int) ((double) (record.get(record.size()-1)) ))
 						{
@@ -102,7 +102,7 @@ public class NaiveBayes
 				// probXp = (double) (probXp * ((double) attrPCount/pCount));
 				// probXe = (double) (probXe * ((double) attrECount/eCount));
 				for (int j = 0; j < probXc.length; j++) {
-					probXc[j] = (double) (probXc[j] * ((double) countXc[j]/cCounts[j]));
+					probXc[j] = (double) (probXc[j] * ((double) (countXc[j]/(double)cCounts[j])));
 				}
 			}
 
@@ -113,14 +113,22 @@ public class NaiveBayes
 			// } else {
 			// 	c = "p";
 			// }
-			
-			for (double prob : probXc) System.out.print(prob + "  ");
-			System.out.println("\n");
+			double c;	//classification: 1.0, 2.0, ... , 5.0
+			double max = 0.0;
+			c = max;
+			for (int i = 0; i < probXc.length; i++)
+			{
+				if ( (double) (probXc[i] * cProbs[i]) > max) {
+					max = (double) (probXc[i] * cProbs[i]);
+					c = (double) i + 1;
+				}
+			}
+				
 
-			// classified.add(c);
+			classified.add(c);
 		}
 		
 
-		return null;
+		return classified;
 	}
 }
